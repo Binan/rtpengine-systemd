@@ -7,7 +7,7 @@ After=network.target iptables.service redis.service syslog.target
 Type=forking
 PIDFile=/var/run/rtpengine.pid
 ExecStart=/usr/bin/rtpengine/rtpengine-start /etc/default/rtpengine --daemonize no
-# Before systemd send kill signal,clean the iptables stuffs (delete the forwarding table, remove the kernel module + delete iptables rules) 
-ExecStopPre=/usr/bin/rtpengine/rtpengine-stop-pre
+# After systemd send kill signal to the daemon, clean the iptables stuffs (delete the forwarding table, remove the kernel module + delete iptables rules) 
+ExecStopPost=/usr/bin/rtpengine/rtpengine-stop-post
 [Install]
 WantedBy=multi-user.target
