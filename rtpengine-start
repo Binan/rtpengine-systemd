@@ -1,0 +1,86 @@
+#! /bin/sh
+
+DEFAULTS=/etc/default/rtpengine-conf
+
+# Load startup options if available
+if [ -f $DEFAULTS ]; then
+	. $DEFAULTS || true
+fi
+
+if [ "$RUN_RTPENGINE" != "yes" ]; then
+	echo "rtpengine not yet configured. Edit $DEFAULTS first."
+	exit 0
+fi
+
+# stops the execution of a script if a command or pipeline has an error
+set -e
+
+# Gradually fill the options of the command rtpengine that starts the RTPEngine daemon
+# The variables used are sourced from the configuration file rtpengine-conf
+
+OPTIONS=""
+
+if [ ! -z "$INTERFACES" ]; then
+	for interface in $INTERFACES; do
+		OPTIONS="$OPTIONS --interface=$interface"
+	done
+fi
+
+[ -z "$LISTEN_TCP" ] || OPTIONS="$OPTIONS --listen-tcp=$LISTEN_TCP"
+[ -z "$LISTEN_UDP" ] || OPTIONS="$OPTIONS --listen-udp=$LISTEN_UDP"
+[ -z "$LISTEN_NG" ] || OPTIONS="$OPTIONS --listen-ng=$LISTEN_NG"
+[ -z "$LISTEN_CLI" ] || OPTIONS="$OPTIONS --listen-cli=$LISTEN_CLI"
+[ -z "$TIMEOUT" ] || OPTIONS="$OPTIONS --timeout=$TIMEOUT"
+[ -z "$SILENT_TIMEOUT" ] || OPTIONS="$OPTIONS --silent-timeout=$SILENT_TIMEOUT"
+[ -z "$PIDFILE" ] || OPTIONS="$OPTIONS --pidfile=$PIDFILE"
+[ -z "$TOS" ] || OPTIONS="$OPTIONS --tos=$TOS"
+[ -z "$PORT_MIN" ] || OPTIONS="$OPTIONS --port-min=$PORT_MIN"
+[ -z "$PORT_MAX" ] || OPTIONS="$OPTIONS --port-max=$PORT_MAX"
+[ -z "$REDIS" ] || OPTIONS="$OPTIONS --redis=$REDIS"
+[ -z "$REDIS_DB" ] || OPTIONS="$OPTIONS --redis-db=$REDIS_DB"
+[ -z "$REDIS_READ" ] || OPTIONS="$OPTIONS --redis-read=$REDIS_READ"
+[ -z "$REDIS_READ_DB" ] || OPTIONS="$OPTIONS --redis-read-db=$REDIS_READ_DB"
+[ -z "$REDIS_WRITE" ] || OPTIONS="$OPTIONS --redis-write=$REDIS_WRITE"
+[ -z "$REDIS_WRITE_DB" ] || OPTIONS="$OPTIONS --redis-write-db=$REDIS_WRITE_DB"
+[ -z "$B2B_URL" ] || OPTIONS="$OPTIONS --b2b-url=$B2B_URL"
+[ -z "$NO_FALLBACK" -o \( "$NO_FALLBACK" != "1" -a "$NO_FALLBACK" != "yes" \) ] || OPTIONS="$OPTIONS --no-fallback"
+OPTIONS="$OPTIONS --table=$TABLE"
+[ -z "$LOG_LEVEL" ] || OPTIONS="$OPTIONS --log-level=$LOG_LEVEL"
+[ -z "$LOG_FACILITY" ] || OPTIONS="$OPTIONS --log-facility=$LOG_FACILITY"
+[ -z "$LOG_FACILITY_CDR" ] || OPTIONS="$OPTIONS --log-facility-cdr=$LOG_FACILITY_CDR"
+[ -z "$LOG_FACILITY_RTCP" ] || OPTIONS="$OPTIONS --log-facility-rtcp=$LOG_FACILITY_RTCP"
+[ -z "$NUM_THREADS" ] || OPTIONS="$OPTIONS --num-threads=$NUM_THREADS"
+[ -z "$DELETE_DELAY" ] || OPTIONS="$OPTIONS --delete-delay=$DELETE_DELAY"
+[ -z "$GRAPHITE" ] || OPTIONS="$OPTIONS --graphite=$GRAPHITE"
+[ -z "$GRAPHITE_INTERVAL" ] || OPTIONS="$OPTIONS --graphite-interval=$GRAPHITE_INTERVAL"
+[ -z "$GRAPHITE_PREFIX" ] || OPTIONS="$OPTIONS --graphite-prefix=$GRAPHITE_PREFIX"
+[ -z "$MAX_SESSIONS" ] || OPTIONS="$OPTIONS --max-sessions=$MAX_SESSIONS"
+
+if test "$FORK" = "no" ; then
+	OPTIONS="$OPTIONS --foreground"
+fi
+
+	
+if [ "$TABLE" -ge 0 ] && [ "$VIRT" != "yes" ]; then
+	set +e
+	modprobe xt_RTPENGINE
+	if [ -e /proc/rtpengine/control ]; then
+		echo "del $TABLE" > /proc/rtpengine/control 2>/dev/null
+	fi
+
+	iptables -N rtpengine 2> /dev/null
+	iptables -D INPUT -j rtpengine 2> /dev/null
+	iptables -I INPUT -j rtpengine
+	iptables -D rtpengine -p udp -j RTPENGINE --id "$TABLE" 2>/dev/null
+	iptables -I rtpengine -p udp -j RTPENGINE --id "$TABLE"
+	ip6tables -N rtpengine 2> /dev/null
+	ip6tables -D INPUT -j rtpengine 2> /dev/null
+	ip6tables -I INPUT -j rtpengine
+	ip6tables -D rtpengine -p udp -j RTPENGINE --id "$TABLE" 2>/dev/null
+	ip6tables -I rtpengine -p udp -j RTPENGINE --id "$TABLE"
+	set -e
+fi
+rtpengine $OPTIONS
+ 
+exit 0
+
