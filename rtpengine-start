@@ -92,7 +92,6 @@ ip6tables -I INPUT -j rtpengine
 ip6tables -D rtpengine -p udp -j RTPENGINE --id "$TABLE" 2>/dev/null
 ip6tables -I rtpengine -p udp -j RTPENGINE --id "$TABLE"
 
-echo $OPTIONS
 rtpengine $OPTIONS
  
 exit 0
