@@ -1,0 +1,28 @@
+#! /bin/sh
+
+# Before systemd send kill signal,clean the iptables stuffs (delete the table, remove kernel module + delete iptables rules) 
+	
+# Load the Table ID the Table and delete the file that contains this ID
+rtpengineTable="/etc/default/rtpengine-table"
+. $rtpengineTable
+
+rm -rf $rtpengineTable
+
+# Delete the Table
+if [ -e /proc/rtpengine/control ]; then
+	echo "del $TABLE" > /proc/rtpengine/control 2>/dev/null
+fi
+	
+iptables -D rtpengine -p udp -j RTPENGINE --id "$TABLE" 2>/dev/null       
+iptables -D INPUT -j rtpengine 2> /dev/null
+iptables -D rtpengine 2> /dev/null
+
+# The same for ip6tables rules
+ip6tables -D rtpengine -p udp -j RTPENGINE --id "$TABLE" 2>/dev/null
+ip6tables -D INPUT -j rtpengine 2> /dev/null
+ip6tables -D rtpengine 2> /dev/null
+
+rmmod xt_RTPENGINE 2>/dev/null
+
+exit 0
+
