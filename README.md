@@ -23,8 +23,13 @@ Edit the configuration file " rtpengine-conf " to reflect your configuration. Th
 In the systemd unit file, the option "ExecStopPost" is used to clean the system after the RTPEngine daemon is stopped. This incolves: deleting the forwarding table, the iptables related rules, and unload the kernel module (xt_RTPENGINE).
 
 Now you can enable/start/stop/status of the rtpengine service as following:
+
 	# systemctl enable rtpengine.service
+
 	# systemctl start rtpengine.service
+
 	# systemctl status rtpengine.service
+
 	# systemctl stop rtpengine.service
-iRestart your system. Check if RTPEngine is working under systemd control.
+
+If you do enable, then the rtpengine will be automatically started by the systemd after boot.   
