@@ -33,3 +33,5 @@ Now you can enable/start/stop/status of the rtpengine service as following:
 	# systemctl stop rtpengine.service
 
 If you do enable, then the rtpengine will be automatically started by the systemd after boot.   
+
+Note: This work is a translation of the SipWise ngcp-rtpengine-daemon.init script to what Systemd needs.
