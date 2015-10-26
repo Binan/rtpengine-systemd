@@ -16,8 +16,8 @@ Edit the configuration file " rtpengine-conf " to reflect your configuration. Th
 	#  cp rtpengine-start /usr/bin/rtpengine/rtpengine-start
 	#  cp rtpengine-stop-post /usr/bin/rtpengine/rtpengine-stop-post
 
-	# chmod +x rtpengine-start
+	# chmod +x /usr/bin/rtpengine/rtpengine-start
 
-	# chmod +x rtpengine-stop-post
+	# chmod +x /usr/bin/rtpengine/rtpengine-stop-post
 
 Restart your system. Check if RTPEngine is working under systemd control.
