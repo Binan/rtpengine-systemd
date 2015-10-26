@@ -1,7 +1,13 @@
 #! /bin/sh
 
-# Before systemd send kill signal,clean the iptables stuffs (delete the table, remove kernel module + delete iptables rules) 
+# After systemd send kill signal to the rtpengine daemon,
+# Wait 5 sec, then clean the iptables stuffs:
+# 1- delete the forwarding table, 
+# 2- delete the iptables rules related to rtpengine
+# 3- Unload the kernel module xt_RTPENGINE
 	
+sleep 5
+
 # Load the Table ID the Table and delete the file that contains this ID
 rtpengineTable="/etc/default/rtpengine-table"
 . $rtpengineTable
