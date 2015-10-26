@@ -7,17 +7,17 @@ Follow these steps:
 
 	# cd rtpengine-systemd
 
-Edit the configuration file " rtpengine-conf " to reflect your configuration. Then install the files:
+Edit the configuration file " rtpengine-conf " to reflect your configuration. Then install the files in your system:
 
 	# cp rtpengine-conf /etc/default/rtpengine-conf
 
 	# cp rtpengine.service /usr/lib/systemd/system/rtpengine.service
 
 	#  cp rtpengine-start /usr/bin/rtpengine/rtpengine-start
-	#  cp rtpengine-stop /usr/bin/rtpengine/rtpengine-stop
+	#  cp rtpengine-stop-post /usr/bin/rtpengine/rtpengine-stop-post
 
 	# chmod +x rtpengine-start
 
-	# chmod +x rtpengine-stop
+	# chmod +x rtpengine-stop-post
 
 Restart your system. Check if RTPEngine is working under systemd control.
