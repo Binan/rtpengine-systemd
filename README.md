@@ -20,4 +20,6 @@ Edit the configuration file " rtpengine-conf " to reflect your configuration. Th
 
 	# chmod +x /usr/bin/rtpengine/rtpengine-stop-post
 
+In the systemd unit file, the option "ExecStopPost" is used to clean the system after the RTPEngine daemon is stopped. This incolves: deleting the forwarding table, the iptables related rules, and unload the kernel module (xt_RTPENGINE).
+
 Restart your system. Check if RTPEngine is working under systemd control.
