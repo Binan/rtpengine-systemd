@@ -8,7 +8,7 @@
 	
 sleep 5
 
-# Load the Table ID the Table and delete the file that contains this ID
+# Load the Table ID and delete the file that contains this ID
 rtpengineTable="/etc/default/rtpengine-table"
 . $rtpengineTable
 rm -rf $rtpengineTable
