@@ -11,8 +11,13 @@ sleep 5
 # Load the Table ID the Table and delete the file that contains this ID
 rtpengineTable="/etc/default/rtpengine-table"
 . $rtpengineTable
-
 rm -rf $rtpengineTable
+
+# Check if the kernel module is loaded
+MODEXIST=`/sbin/lsmod | grep "xt_RTPENGINE"`
+if [ -z "$MODEXIST" ]; then
+	exit 0
+fi
 
 # Delete the Table
 if [ -e /proc/rtpengine/control ]; then
