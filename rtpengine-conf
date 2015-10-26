@@ -1,7 +1,7 @@
 
 # Comment the variables that you don't want to be used for the configuration
 
-RUN_RTPENGINE=no
+RUN_RTPENGINE=yes
 #LISTEN_TCP=25060
 #LISTEN_UDP=12222
 LISTEN_NG=60000

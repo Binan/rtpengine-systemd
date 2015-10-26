@@ -20,4 +20,9 @@ Edit the configuration file " rtpengine-conf " to reflect your configuration. Th
 
 	# chmod +x rtpengine-stop
 
-Restart your system. Check if RTPEngine is working under systemd control.
+Now you can enable/start/stop/status of the rtpengine service as following:
+	# systemctl enable rtpengine.service
+	# systemctl start rtpengine.service
+	# systemctl status rtpengine.service
+	# systemctl stop rtpengine.service
+iRestart your system. Check if RTPEngine is working under systemd control.
