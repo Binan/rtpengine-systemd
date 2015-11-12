@@ -2,15 +2,15 @@
 To Compile and install the Sipwise RTPEngine: 
 [Click Here!](https://voipmagazine.wordpress.com/2015/02/17/rtpengine-compilation-and-installation-in-fedora-redhat/)
 
-To run the RTPEngine under systemd control:
-Follow these steps:
-* Clone the repository to your local machine:
+To run the RTPEngine under systemd control, follow these steps:
+
+Clone the repository to your local machine:
 
 	# git clone https://github.com/Binan/rtpengine-systemd.git
 
 	# cd rtpengine-systemd
 
-* Edit the configuration file " rtpengine-conf " to reflect your configuration. Then install the files in your system:
+Edit the configuration file " rtpengine-conf " to reflect your configuration. Then install the files in your system:
 
 	# cp rtpengine-conf /etc/default/rtpengine-conf
 
